@@ -14,13 +14,11 @@
     <artifactId>interview-service</artifactId>
     <version>0.0.1</version>
 
-    <name>Interview-service</name>
-
-    <description>Simple Interview Bot project using Maven</description>
+    <name>interview-service</name>
 
     <properties>
         <java.version>21</java.version>
-        <maven.compiler.sourse>21</maven.compiler.sourse>
+        <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
 
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
