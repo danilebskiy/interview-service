@@ -21,10 +21,10 @@ services:
     depends_on:
       - db
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://${db:5432}/$
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
-      SPRING_LIQUIBASE_URL: jdbc:postgresql://${db:5432}/$
+      SPRING_LIQUIBASE_URL: jdbc:postgresql://db:5432}/${POSTGRES_DB}
       SPRING_LIQUIBASE_USER: ${POSTGRES_USER}
       SPRING_LIQUIBASE_PASSWORD: ${POSTGRES_PASSWORD}
 
