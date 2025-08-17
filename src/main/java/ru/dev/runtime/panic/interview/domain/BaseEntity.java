@@ -1,4 +1,5 @@
 package ru.dev.runtime.panic.interview.domain;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,9 +8,6 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.OffsetDateTime;
 import java.util.Objects;
@@ -28,18 +26,18 @@ public abstract class BaseEntity {
     private UUID id;
 
     @CreationTimestamp
-    @Column(name="created")
+    @Column(name = "created")
     private OffsetDateTime created;
 
     @UpdateTimestamp
-    @Column(name="updated")
+    @Column(name = "updated")
     private OffsetDateTime updated;
 
-    @Column(name="deleted")
+    @Column(name = "deleted")
     private OffsetDateTime deleted;
 
     @Version
-    @Column(name="version")
+    @Column(name = "version")
     private Long version;
 
 
