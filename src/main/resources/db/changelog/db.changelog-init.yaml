@@ -1,0 +1,125 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_table_answer_options
+      author: danilebskiy
+      changes:
+        - createTable:
+            tableName: answer_options
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: created
+                  type: TIMESTAMP WITH TIMEZONE
+              - column:
+                  name: updated
+                  type: TIMESTAMP WITH TIMEZONE
+              - column:
+                  name: deleted
+                  type: TIMESTAMP WITH TIMEZONE
+              - column:
+                  name: version
+                  type: BIGINT
+              - column:
+                  name: test
+                  type: VARCHAR(255)
+              - column:
+                  name: is_correct
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: question_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: create_table_questions
+      author: danilebskiy
+      changes:
+        - createTable:
+            tableName: questions
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: created
+                  type: TIMESTAMP WITH TIMEZONE
+              - column:
+                  name: updated
+                  type: TIMESTAMP WITH TIMEZONE
+              - column:
+                  name: deleted
+                  type: TIMESTAMP WITH TIMEZONE
+              - column:
+                  name: version
+                  type: BIGINT
+              - column:
+                  name: text
+                  type: VARCHAR(1000)
+              - column:
+                  name: difficulty
+                  type: VARCHAR(255)
+              - column:
+                  name: topic_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: create_table_topics
+      author: danilebskiy
+      changes:
+        - createTable:
+            tableName: topics
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: created
+                  type: TIMESTAMP WITH TIMEZONE
+              - column:
+                  name: updated
+                  type: TIMESTAMP WITH TIMEZONE
+              - column:
+                  name: deleted
+                  type: TIMESTAMP WITH TIMEZONE
+              - column:
+                  name: version
+                  type: BIGINT
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+
+  - changeSet:
+      id: add_constraints
+      author: danilebskiy
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: answer_options
+            baseColumnNames: question_id
+            constraintName: fk_answer_option_question
+            referencedTableName: questions
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: questions
+            baseColumnNames: topic_id
+            constraintName: fk_question_topic
+            referencedTableName: topics
+            referencedColumnNames: id
