@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: create_table_answer_option
+      id: create_table_answer_options
       author: danilebskiy
       changes:
         - createTable:
-            tableName: answer_option
+            tableName: answer_options
             columns:
               - column:
                   name: id
@@ -24,8 +24,6 @@ databaseChangeLog:
               - column:
                   name: version
                   type: BIGINT
-                  constraints:
-                    nullable: false
               - column:
                   name: test
                   type: VARCHAR(255)
@@ -40,11 +38,11 @@ databaseChangeLog:
                     nullable: false
 
   - changeSet:
-      id: create_table_question
+      id: create_table_questions
       author: danilebskiy
       changes:
         - createTable:
-            tableName: question
+            tableName: questions
             columns:
               - column:
                   name: id
@@ -77,11 +75,11 @@ databaseChangeLog:
                     nullable: false
 
   - changeSet:
-      id: create_table_topic
+      id: create_table_topics
       author: danilebskiy
       changes:
         - createTable:
-            tableName: topic
+            tableName: topics
             columns:
               - column:
                   name: id
@@ -113,15 +111,15 @@ databaseChangeLog:
       author: danilebskiy
       changes:
         - addForeignKeyConstraint:
-            baseTableName: answer_option
+            baseTableName: answer_options
             baseColumnNames: question_id
             constraintName: fk_answer_option_question
-            referencedTableName: question
+            referencedTableName: questions
             referencedColumnNames: id
 
         - addForeignKeyConstraint:
-            baseTableName: question
+            baseTableName: questions
             baseColumnNames: topic_id
             constraintName: fk_question_topic
-            referencedTableName: topic
+            referencedTableName: topics
             referencedColumnNames: id
