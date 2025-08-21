@@ -10,7 +10,7 @@ import ru.dev.runtime.panic.interview.domain.BaseEntity;
 @Setter
 @NoArgsConstructor
 @ToString(callSuper = true)
-@Table(name = "answer_option")
+@Table(name = "answer_options")
 @Entity
 public class AnswerOption extends BaseEntity {
 

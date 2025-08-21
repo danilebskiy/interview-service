@@ -15,8 +15,6 @@ databaseChangeLog:
               - column:
                   name: created
                   type: TIMESTAMP WITH TIMEZONE
-                  constraints:
-                    nullable: false
               - column:
                   name: updated
                   type: TIMESTAMP WITH TIMEZONE
@@ -57,8 +55,6 @@ databaseChangeLog:
               - column:
                   name: created
                   type: TIMESTAMP WITH TIMEZONE
-                  constraints:
-                    nullable: false
               - column:
                   name: updated
                   type: TIMESTAMP WITH TIMEZONE
@@ -68,8 +64,6 @@ databaseChangeLog:
               - column:
                   name: version
                   type: BIGINT
-                  constraints:
-                    nullable: false
               - column:
                   name: text
                   type: VARCHAR(1000)
@@ -98,8 +92,6 @@ databaseChangeLog:
               - column:
                   name: created
                   type: TIMESTAMP WITH TIMEZONE
-                  constraints:
-                    nullable: false
               - column:
                   name: updated
                   type: TIMESTAMP WITH TIMEZONE
@@ -109,13 +101,9 @@ databaseChangeLog:
               - column:
                   name: version
                   type: BIGINT
-                  constraints:
-                    nullable: false
               - column:
                   name: title
                   type: VARCHAR(255)
-                  constraints:
-                    nullable: false
               - column:
                   name: description
                   type: VARCHAR(255)

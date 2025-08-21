@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @ToString(callSuper = true)
 @NoArgsConstructor
-@Table(name = "question")
+@Table(name = "questions")
 public class Question extends BaseEntity {
 
     @Column(name = "text")

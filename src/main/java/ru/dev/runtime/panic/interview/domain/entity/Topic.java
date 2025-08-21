@@ -1,20 +1,17 @@
 package ru.dev.runtime.panic.interview.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import ru.dev.runtime.panic.interview.domain.BaseEntity;
 
 import java.util.List;
-
+@EqualsAndHashCode(callSuper=true)
 @Entity
 @Getter
 @Setter
 @ToString(callSuper = true)
 @NoArgsConstructor
-@Table(name = "topic")
+@Table(name = "topics")
 public class Topic extends BaseEntity {
 
     @Column(name = "title")
