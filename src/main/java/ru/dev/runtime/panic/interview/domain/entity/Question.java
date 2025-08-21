@@ -1,18 +1,19 @@
 package ru.dev.runtime.panic.interview.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import ru.dev.runtime.panic.interview.domain.BaseEntity;
 
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Data
-@Table(name="question")
+@Getter
+@Setter
+@ToString(callSuper = true)
+@NoArgsConstructor
+@Table(name = "question")
 public class Question extends BaseEntity {
-
 
     @Column(name = "text")
     private String text;
@@ -23,5 +24,9 @@ public class Question extends BaseEntity {
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AnswerOption> options;
+
+    @ManyToOne
+    @JoinColumn(name = "topic_id")
+    private Topic topic;
 
 }
