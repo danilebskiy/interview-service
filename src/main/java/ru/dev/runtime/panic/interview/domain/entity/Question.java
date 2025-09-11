@@ -22,7 +22,7 @@ public class Question extends BaseEntity {
     @Column(name = "difficulty")
     private Difficulty difficulty;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL,fetch = FetchType.LAZY, orphanRemoval = true)
     private List<AnswerOption> options;
 
     @ManyToOne

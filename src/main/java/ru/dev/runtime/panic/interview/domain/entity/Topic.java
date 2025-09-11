@@ -20,7 +20,7 @@ public class Topic extends BaseEntity {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL,fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Question> questions;
 
 }
