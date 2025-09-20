@@ -1,21 +1,21 @@
 package ru.dev.runtime.panic.interview.services;
 
-import ru.dev.runtime.panic.interview.dto.CreateQuestionDto;
+import org.springframework.data.domain.Page;
+import ru.dev.runtime.panic.interview.domain.entity.Question;
 import ru.dev.runtime.panic.interview.dto.QuestionDto;
 
-import java.util.List;
+import org.springframework.data.domain.Pageable;
 import java.util.UUID;
 
 public interface QuestionEntityService {
 
-    QuestionDto createQuestion(CreateQuestionDto createQuestionDto);
+    Question createQuestion(Question question);
 
-    QuestionDto getQuestionById(UUID id);
+    Question getQuestionById(UUID id);
 
-    List<QuestionDto> getAllQuestions(int page, int size);
+    Page<Question> getAllQuestions(Pageable pageable);
 
-    QuestionDto updateQuestion(UUID id, QuestionDto questionDto);
+    Question updateQuestion(Question question);
 
     void deleteQuestionById(UUID id);
-
 }

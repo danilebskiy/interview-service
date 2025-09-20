@@ -6,6 +6,8 @@ import ru.dev.runtime.panic.interview.domain.entity.AnswerOption;
 import ru.dev.runtime.panic.interview.dto.AnswerOptionDto;
 import ru.dev.runtime.panic.interview.dto.CreateAnswerOptionDto;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface AnswerOptionMapper {
 
@@ -24,7 +26,8 @@ public interface AnswerOptionMapper {
     @Mapping(target = "updated", ignore = true)
     @Mapping(target = "deleted", ignore = true)
     @Mapping(target = "version", ignore = true)
-    @Mapping(source = "questionId", target = "question.id")
-    AnswerOption answerOptionDtoToAnswerOption(AnswerOptionDto answerOptionDto);
+    @Mapping(target = "question", ignore = true)
+    List<AnswerOptionDto> listAnswerOptionToAnswerOptionDto(List<AnswerOption> entities);
+
 
 }

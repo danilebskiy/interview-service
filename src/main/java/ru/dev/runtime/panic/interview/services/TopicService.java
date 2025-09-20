@@ -7,17 +7,17 @@ import ru.dev.runtime.panic.interview.dto.TopicDto;
 import java.util.List;
 import java.util.UUID;
 
-public interface TopicEntityService {
+public interface TopicService {
 
-    Topic getTopicById(UUID id);
+    TopicDto getTopicById(UUID id);
 
-    Topic findTopicByWithQuestions(UUID id);
+    TopicDto findTopicByWithQuestions(UUID id);
 
-    List<Topic> getAllTopics();
+    List<TopicDto> getAllTopics();
 
-    Topic createTopic(Topic topic);
+    TopicDto createTopic(CreateTopicDto createTopicDto);
 
-    Topic updateTopic(UUID id, Topic topic);
+    TopicDto updateTopic(UUID id, TopicDto topicDto);
 
     void deleteTopic(UUID id);
 }
