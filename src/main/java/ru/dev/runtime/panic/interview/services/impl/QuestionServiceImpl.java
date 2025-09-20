@@ -3,13 +3,15 @@ package ru.dev.runtime.panic.interview.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dev.runtime.panic.interview.domain.entity.AnswerOption;
 import ru.dev.runtime.panic.interview.domain.entity.Question;
-import ru.dev.runtime.panic.interview.domain.entity.Topic;
-import ru.dev.runtime.panic.interview.dto.AnswerOptionDto;
 import ru.dev.runtime.panic.interview.dto.CreateAnswerOptionDto;
 import ru.dev.runtime.panic.interview.dto.CreateQuestionDto;
 import ru.dev.runtime.panic.interview.dto.QuestionDto;
@@ -19,6 +21,7 @@ import ru.dev.runtime.panic.interview.mapper.QuestionMapper;
 import ru.dev.runtime.panic.interview.repositories.QuestionRepository;
 import ru.dev.runtime.panic.interview.repositories.TopicRepository;
 import ru.dev.runtime.panic.interview.services.QuestionEntityService;
+import ru.dev.runtime.panic.interview.services.QuestionService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,21 +30,20 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class QuestionServiceImpl implements QuestionEntityService {
+public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionRepository questionRepository;
     private final QuestionMapper questionMapper;
     private final TopicRepository topicRepository;
-    private final AnswerOptionMapper answerOptionMapper;
+    private final AnswerOptionMapper  answerOptionMapper;
+    private final QuestionEntityService questionEntityService;
 
     @Override
-    public List<QuestionDto> getAllQuestions(int page, int size) {
-        PageRequest pageable = PageRequest.of(page, size);
-        Page<Question> questionPage = questionRepository.findAll(pageable);
-        List<Question> questions = questionPage.getContent();
-        return questions.stream()
-                .map(questionMapper::toQuestionDto)
-                .collect(Collectors.toList());
+    public Page<QuestionDto> getAllQuestions(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Question> questionPage = questionEntityService.getAllQuestions(pageable);
+        List<QuestionDto> questions = questionPage.stream().map(questionMapper::toQuestionDto).collect(Collectors.toList());
+        return new PageImpl<>(questions, pageable, questionPage.getTotalElements());
     }
 
     @Override
@@ -52,41 +54,38 @@ public class QuestionServiceImpl implements QuestionEntityService {
 
     @Override
     @Transactional
-    public QuestionDto createQuestion(CreateQuestionDto createQuestionDto) {
-        Topic topic = topicRepository.findById(createQuestionDto.getTopicId())
-                .orElseThrow(() -> new ResourseNotFoundException("Topic not found with id " + createQuestionDto.getTopicId()));
+    public QuestionDto createQuestion(UUID topicId, CreateQuestionDto createQuestionDto) {
         Question question = questionMapper.toQuestion(createQuestionDto);
-        question.setTopic(topic);
+        question.setTopic(topicRepository.findById(topicId).orElse(null));
         List<AnswerOption> answerOptions = new ArrayList<>();
         if (createQuestionDto.getOptions() != null && !createQuestionDto.getOptions().isEmpty()) {
-            for (CreateAnswerOptionDto optionDto : createQuestionDto.getOptions()) {
-                AnswerOption answerOption = answerOptionMapper.createAnswerOptionDtoToAnswerOption(optionDto);
+            for (CreateAnswerOptionDto createAnswerOptionDto : createQuestionDto.getOptions()) {
+                AnswerOption answerOption = answerOptionMapper.createAnswerOptionDtoToAnswerOption(createAnswerOptionDto);
                 answerOption.setQuestion(question);
                 answerOptions.add(answerOption);
             }
         }
         question.setOptions(answerOptions);
-        Question savedQuestion = questionRepository.save(question);
-        return questionMapper.toQuestionDto(savedQuestion);
+        Question saved = questionEntityService.createQuestion(question);
+        return questionMapper.toQuestionDto(saved);
     }
 
     @Override
-    public QuestionDto updateQuestion(UUID id, QuestionDto questionDto) {
-        Topic topic = topicRepository.findById(questionDto.getTopicId())
-                .orElseThrow(() -> new ResourseNotFoundException("Topic not found with id " + questionDto.getTopicId()));
-        Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new ResourseNotFoundException("Question not found with id " + id));
-        questionMapper.toQuestionDto(question);
-        question.setTopic(topic);
-        Question updateQuestion = questionRepository.save(question);
-        return questionMapper.toQuestionDto(updateQuestion);
+    public QuestionDto updateQuestion(UUID id, UUID topicId, QuestionDto questionDto) {
+        Question existing = questionEntityService.getQuestionById(id);
+        if (existing == null) {
+            throw new ResourseNotFoundException("Question not found" + id);
+        }
+        Question updated = questionMapper.toEntity(questionDto);
+        updated.setId(id);
+        updated.setTopic(topicRepository.findById(topicId).orElse(null));
+        Question saved = questionEntityService.updateQuestion(updated);
+        return questionMapper.toQuestionDto(saved);
     }
 
     @Override
     public void deleteQuestionById(UUID id) {
-        Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new ResourseNotFoundException("Question not found with id " + id + " "));
-        questionRepository.delete(question);
+        questionEntityService.deleteQuestionById(id);
     }
 }
 

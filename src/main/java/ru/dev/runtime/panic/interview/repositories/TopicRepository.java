@@ -13,5 +13,5 @@ import java.util.UUID;
 public interface TopicRepository extends JpaRepository<Topic, UUID> {
 
     @Query("SELECT t FROM Topic t LEFT JOIN FETCH t.questions WHERE t.id = :id")
-    Optional<Topic> findByWithQuestions(UUID id);
+    Optional<Topic> findByIdWithQuestions(UUID id);
 }

@@ -1,70 +1,60 @@
 package ru.dev.runtime.panic.interview.services.impl;
 
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
 import ru.dev.runtime.panic.interview.domain.entity.AnswerOption;
-import ru.dev.runtime.panic.interview.domain.entity.Question;
 import ru.dev.runtime.panic.interview.dto.AnswerOptionDto;
 import ru.dev.runtime.panic.interview.dto.CreateAnswerOptionDto;
-import ru.dev.runtime.panic.interview.exception.ResourseNotFoundException;
 import ru.dev.runtime.panic.interview.mapper.AnswerOptionMapper;
-import ru.dev.runtime.panic.interview.repositories.AnswerOptionRepository;
 import ru.dev.runtime.panic.interview.repositories.QuestionRepository;
 import ru.dev.runtime.panic.interview.services.AnswerOptionEntityService;
+import ru.dev.runtime.panic.interview.services.AnswerOptionService;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AnswerOptionServiceImpl implements AnswerOptionEntityService {
+public class AnswerOptionServiceImpl implements AnswerOptionService {
 
+    private final AnswerOptionEntityService answerOptionEntityService;
     private final AnswerOptionMapper answerOptionMapper;
-    private final AnswerOptionRepository answerOptionRepository;
     private final QuestionRepository questionRepository;
 
 
     @Override
     public List<AnswerOptionDto> getAnswerOptionByQuestionId(UUID questionId) {
-        Question question = questionRepository.findById(questionId)
-                .orElseThrow(() -> new ResourseNotFoundException("Question not found with id: " + questionId));
-        List<AnswerOption> answerOptions = answerOptionRepository.findByQuestion(question);
-        return answerOptions.stream()
-                .map(answerOptionMapper::answerOptionToAnswerOptionDto)
-                .collect(Collectors.toList());
+        List<AnswerOption> entities = answerOptionEntityService.getAnswerOptionByQuestionId(questionId);
+        return answerOptionMapper.listAnswerOptionToAnswerOptionDto(entities);
     }
 
     @Override
     public AnswerOptionDto getAnswerOptionById(UUID id) {
-        AnswerOption answerOption = answerOptionRepository.findById(id)
-                .orElseThrow(() -> new ResourseNotFoundException("AnswerOption not found with id: " + id));
-        return answerOptionMapper.answerOptionToAnswerOptionDto(answerOption);
+        AnswerOption entity = answerOptionEntityService.getAnswerOptionById(id);
+        return answerOptionMapper.answerOptionToAnswerOptionDto(entity);
     }
 
     @Override
-    public AnswerOptionDto createAnswerOption(CreateAnswerOptionDto createAnswerOptionDto) {
-        Question question = questionRepository.findById(createAnswerOptionDto.getQuestionId()).orElseThrow(() -> new ResourseNotFoundException("Question not found with id: " + createAnswerOptionDto.getQuestionId()));
-        AnswerOption answerOption = answerOptionMapper.createAnswerOptionDtoToAnswerOption(createAnswerOptionDto);
-        answerOption.setQuestion(question);
-        AnswerOption savedAnswerOption = answerOptionRepository.save(answerOption);
-        return answerOptionMapper.answerOptionToAnswerOptionDto(savedAnswerOption);
+    public AnswerOptionDto createAnswerOption(UUID questionId, CreateAnswerOptionDto createAnswerOptionDto) {
+        AnswerOption entity = answerOptionMapper.createAnswerOptionDtoToAnswerOption(createAnswerOptionDto);
+        entity.setQuestion(questionRepository.findById(questionId).orElse(null));
+        AnswerOption createdEntity = answerOptionEntityService.createAnswerOption(entity);
+        return answerOptionMapper.answerOptionToAnswerOptionDto(createdEntity);
     }
 
     @Override
-    public AnswerOptionDto updateAnswerOption(UUID id, AnswerOptionDto answerOptionDto) {
-        AnswerOption answerOption = answerOptionRepository.findById(id)
-                .orElseThrow(() -> new ResourseNotFoundException("AnswerOption not found with id: " + id));
-        answerOptionMapper.answerOptionToAnswerOptionDto(answerOption);
-        AnswerOption updatedAnswerOption = answerOptionRepository.save(answerOption);
-        return answerOptionMapper.answerOptionToAnswerOptionDto(updatedAnswerOption);
+    public AnswerOptionDto updateAnswerOption(UUID id, UUID questionId, AnswerOptionDto answerOptionDto) {
+        AnswerOption existingEntity = answerOptionEntityService.getAnswerOptionById(id);
+        if (existingEntity != null) {
+            existingEntity.setTest(answerOptionDto.getTest());
+            AnswerOption updatedEntity = answerOptionEntityService.updateAnswerOption(existingEntity);
+            return answerOptionMapper.answerOptionToAnswerOptionDto(updatedEntity);
+        }
+        return null;
     }
 
     @Override
     public void deleteAnswerOptionById(UUID id) {
-        AnswerOption answerOption = answerOptionRepository.findById(id)
-                .orElseThrow(() -> new ResourseNotFoundException("AnswerOption not found with id: " + id));
-        answerOptionRepository.delete(answerOption);
+        answerOptionEntityService.deleteAnswerOptionById(id);
     }
 }

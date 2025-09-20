@@ -18,4 +18,11 @@ public interface TopicMapper {
     @Mapping(target = "version", ignore = true)
     Topic toTopic(CreateTopicDto createTopicDto);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "created", ignore = true)
+    @Mapping(target = "updated", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
+    @Mapping(target = "version", ignore = true)
+    Topic toEntity(TopicDto topicDto);
+
 }

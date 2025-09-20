@@ -1,7 +1,6 @@
 package ru.dev.runtime.panic.interview.services;
 
-
-import ru.dev.runtime.panic.interview.dto.AnswerOptionDto;
+import ru.dev.runtime.panic.interview.domain.entity.AnswerOption;
 import ru.dev.runtime.panic.interview.dto.CreateAnswerOptionDto;
 
 import java.util.List;
@@ -9,13 +8,13 @@ import java.util.UUID;
 
 public interface AnswerOptionEntityService {
 
-    AnswerOptionDto createAnswerOption(CreateAnswerOptionDto createAnswerOptionDto);
+    AnswerOption createAnswerOption(AnswerOption answerOption);
 
-    AnswerOptionDto getAnswerOptionById(UUID id);
+    AnswerOption getAnswerOptionById(UUID Id);
 
-    List<AnswerOptionDto> getAnswerOptionByQuestionId(UUID questionId);
+    List<AnswerOption> getAnswerOptionByQuestionId(UUID questionId);
 
-    AnswerOptionDto updateAnswerOption(UUID id, AnswerOptionDto answerOptionDto);
+    AnswerOption updateAnswerOption(AnswerOption answerOption);
 
-    void deleteAnswerOptionById(UUID id);
+    void deleteAnswerOptionById(UUID Id);
 }

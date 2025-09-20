@@ -19,5 +19,13 @@ public interface QuestionMapper {
     @Mapping(source = "topicId", target = "topic.id")
     Question toQuestion(CreateQuestionDto createQuestionDto);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "created", ignore = true)
+    @Mapping(target = "updated", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
+    @Mapping(target = "version", ignore = true)
+    @Mapping(source = "topicId", target = "topic.id")
+    Question toEntity(QuestionDto questionDto);
+
 
 }
