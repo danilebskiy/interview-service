@@ -1,6 +1,7 @@
 package ru.dev.runtime.panic.interview.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.dev.runtime.panic.interview.dto.CreateTopicDto;
@@ -28,8 +29,8 @@ public class TopicController {
     }
 
     @GetMapping
-    public List<TopicDto> getAllTopics() {
-        return topicService.getAllTopics();
+    public Page<TopicDto> getAllTopics(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return topicService.getAllTopics(page, size);
     }
 
     @PostMapping

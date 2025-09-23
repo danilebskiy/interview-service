@@ -1,5 +1,6 @@
 package ru.dev.runtime.panic.interview.services;
 
+import org.springframework.data.domain.Page;
 import ru.dev.runtime.panic.interview.domain.entity.Topic;
 import ru.dev.runtime.panic.interview.dto.CreateTopicDto;
 import ru.dev.runtime.panic.interview.dto.TopicDto;
@@ -13,7 +14,7 @@ public interface TopicService {
 
     TopicDto findTopicByWithQuestions(UUID id);
 
-    List<TopicDto> getAllTopics();
+    Page<TopicDto> getAllTopics(int  page, int size);
 
     TopicDto createTopic(CreateTopicDto createTopicDto);
 

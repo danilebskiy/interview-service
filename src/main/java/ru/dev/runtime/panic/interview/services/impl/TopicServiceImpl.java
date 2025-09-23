@@ -2,10 +2,16 @@ package ru.dev.runtime.panic.interview.services.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.dev.runtime.panic.interview.domain.entity.Question;
 import ru.dev.runtime.panic.interview.domain.entity.Topic;
 import ru.dev.runtime.panic.interview.dto.CreateTopicDto;
+import ru.dev.runtime.panic.interview.dto.QuestionDto;
 import ru.dev.runtime.panic.interview.dto.TopicDto;
 import ru.dev.runtime.panic.interview.mapper.TopicMapper;
 import ru.dev.runtime.panic.interview.repositories.TopicRepository;
@@ -38,16 +44,19 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public List<TopicDto> getAllTopics(){
-        return topicEntityService.getAllTopics()
-                .stream()
-                .map(topicMapper::toTopicDto)
-                .collect(Collectors.toList());
+    public Page<TopicDto> getAllTopics(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Topic> topicPage = topicEntityService.getAllTopics(pageable);
+        List<TopicDto> topics = topicPage.stream().map(topicMapper::toTopicDto).collect(Collectors.toList());
+        return new PageImpl<>(topics, pageable, topicPage.getTotalElements());
     }
 
     @Override
     @Transactional
     public TopicDto createTopic(CreateTopicDto createTopicDto){
+        if (topicRepository.existsByTitle(createTopicDto.getTitle())){
+            throw new IllegalArgumentException("Топик с таким названием уже существует");
+        }
         Topic topic = topicMapper.toTopic(createTopicDto);
         Topic savedTopic = topicEntityService.createTopic(topic);
         return topicMapper.toTopicDto(savedTopic);

@@ -1,5 +1,7 @@
 package ru.dev.runtime.panic.interview.services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ru.dev.runtime.panic.interview.domain.entity.Topic;
 import ru.dev.runtime.panic.interview.dto.CreateTopicDto;
 import ru.dev.runtime.panic.interview.dto.TopicDto;
@@ -13,7 +15,7 @@ public interface TopicEntityService {
 
     Topic findTopicByWithQuestions(UUID id);
 
-    List<Topic> getAllTopics();
+    Page<Topic> getAllTopics(Pageable pageable);
 
     Topic createTopic(Topic topic);
 

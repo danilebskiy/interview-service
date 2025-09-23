@@ -14,7 +14,7 @@ import java.util.List;
 @Table(name = "topics")
 public class Topic extends BaseEntity {
 
-    @Column(name = "title")
+    @Column(name = "title", unique = true)
     private String title;
 
     @Column(name = "description")

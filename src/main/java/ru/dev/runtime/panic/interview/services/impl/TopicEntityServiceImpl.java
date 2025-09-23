@@ -1,6 +1,8 @@
 package ru.dev.runtime.panic.interview.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.dev.runtime.panic.interview.domain.entity.Topic;
 import ru.dev.runtime.panic.interview.dto.CreateTopicDto;
@@ -23,8 +25,8 @@ public class TopicEntityServiceImpl implements TopicEntityService {
     }
 
     @Override
-    public List<Topic> getAllTopics(){
-        return topicRepository.findAll();
+    public Page<Topic> getAllTopics(Pageable pageable){
+        return topicRepository.findAll(pageable);
     }
 
     @Override
@@ -34,7 +36,7 @@ public class TopicEntityServiceImpl implements TopicEntityService {
 
     @Override
     public Topic findTopicByWithQuestions(UUID id){
-        return topicRepository.findByIdWithQuestions(id).get();
+        return topicRepository.findById(id).get();
     }
 
     @Override
@@ -46,4 +48,5 @@ public class TopicEntityServiceImpl implements TopicEntityService {
     public void deleteTopic(UUID id){
         topicRepository.deleteById(id);
     }
+
 }
