@@ -22,6 +22,7 @@ public class AnswerOption extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "question_id")
+    @ToString.Exclude
     private Question question;
 
 }

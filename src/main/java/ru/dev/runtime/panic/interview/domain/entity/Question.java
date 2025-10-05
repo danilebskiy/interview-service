@@ -23,6 +23,7 @@ public class Question extends BaseEntity {
     private Difficulty difficulty;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL,fetch = FetchType.LAZY, orphanRemoval = true)
+    @ToString.Exclude
     private List<AnswerOption> options;
 
     @ManyToOne

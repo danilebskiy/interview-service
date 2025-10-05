@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dev.runtime.panic.interview.domain.entity.AnswerOption;
 import ru.dev.runtime.panic.interview.domain.entity.Question;
+import ru.dev.runtime.panic.interview.domain.entity.Topic;
 import ru.dev.runtime.panic.interview.dto.CreateAnswerOptionDto;
 import ru.dev.runtime.panic.interview.dto.CreateQuestionDto;
 import ru.dev.runtime.panic.interview.dto.QuestionDto;
@@ -35,7 +36,7 @@ public class QuestionServiceImpl implements QuestionService {
     private final QuestionRepository questionRepository;
     private final QuestionMapper questionMapper;
     private final TopicRepository topicRepository;
-    private final AnswerOptionMapper  answerOptionMapper;
+    private final AnswerOptionMapper answerOptionMapper;
     private final QuestionEntityService questionEntityService;
 
     @Override
@@ -76,11 +77,17 @@ public class QuestionServiceImpl implements QuestionService {
         if (existing == null) {
             throw new ResourseNotFoundException("Question not found" + id);
         }
-        Question updated = questionMapper.toEntity(questionDto);
-        updated.setId(id);
-        updated.setTopic(topicRepository.findById(topicId).orElse(null));
-        Question saved = questionEntityService.updateQuestion(updated);
+        existing.setText(questionDto.getText());
+        existing.setDifficulty(questionDto.getDifficulty());
+        if (topicId != null) {
+            Topic newTopic = topicRepository.findById(topicId).orElse(null);
+            existing.setTopic(newTopic);
+        } else {
+            existing.setTopic(null);
+        }
+        Question saved = questionEntityService.updateQuestion(existing);
         return questionMapper.toQuestionDto(saved);
+
     }
 
     @Override
