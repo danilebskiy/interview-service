@@ -5,11 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.dev.runtime.panic.interview.domain.entity.Topic;
-import ru.dev.runtime.panic.interview.dto.CreateTopicDto;
 import ru.dev.runtime.panic.interview.repositories.TopicRepository;
 import ru.dev.runtime.panic.interview.services.TopicEntityService;
 
-import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
