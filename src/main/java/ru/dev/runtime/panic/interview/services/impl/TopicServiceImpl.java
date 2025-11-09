@@ -8,10 +8,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dev.runtime.panic.interview.domain.entity.Question;
 import ru.dev.runtime.panic.interview.domain.entity.Topic;
 import ru.dev.runtime.panic.interview.dto.CreateTopicDto;
-import ru.dev.runtime.panic.interview.dto.QuestionDto;
 import ru.dev.runtime.panic.interview.dto.TopicDto;
 import ru.dev.runtime.panic.interview.mapper.TopicMapper;
 import ru.dev.runtime.panic.interview.repositories.TopicRepository;
@@ -63,6 +61,7 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
+    @Transactional
     public TopicDto updateTopic(UUID id, TopicDto topicDto){
         Topic existingTopic = topicEntityService.getTopicById(id);
         if (existingTopic == null){

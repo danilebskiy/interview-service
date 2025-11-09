@@ -6,8 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dev.runtime.panic.interview.domain.entity.AnswerOption;
@@ -72,6 +70,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    @Transactional
     public QuestionDto updateQuestion(UUID id, UUID topicId, QuestionDto questionDto) {
         Question existing = questionEntityService.getQuestionById(id);
         if (existing == null) {

@@ -2,6 +2,7 @@ package ru.dev.runtime.panic.interview.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.dev.runtime.panic.interview.domain.entity.AnswerOption;
 import ru.dev.runtime.panic.interview.dto.AnswerOptionDto;
 import ru.dev.runtime.panic.interview.dto.CreateAnswerOptionDto;
@@ -35,6 +36,7 @@ public class AnswerOptionServiceImpl implements AnswerOptionService {
     }
 
     @Override
+    @Transactional
     public AnswerOptionDto createAnswerOption(UUID questionId, CreateAnswerOptionDto createAnswerOptionDto) {
         AnswerOption entity = answerOptionMapper.createAnswerOptionDtoToAnswerOption(createAnswerOptionDto);
         entity.setQuestion(questionRepository.findById(questionId).orElse(null));
@@ -43,6 +45,7 @@ public class AnswerOptionServiceImpl implements AnswerOptionService {
     }
 
     @Override
+    @Transactional
     public AnswerOptionDto updateAnswerOption(UUID id, UUID questionId, AnswerOptionDto answerOptionDto) {
         AnswerOption existingEntity = answerOptionEntityService.getAnswerOptionById(id);
         if (existingEntity != null) {
